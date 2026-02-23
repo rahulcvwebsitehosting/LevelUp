@@ -7,11 +7,14 @@ import { SplitManager } from './components/SplitManager';
 import { Settings } from './components/Settings';
 import { motion, AnimatePresence } from 'motion/react';
 import { Trophy } from 'lucide-react';
+import { useAnimatedFavicon } from './hooks/useAnimatedFavicon';
 
 function AppContent() {
   const { activeSession, user } = useApp();
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [showLevelUp, setShowLevelUp] = useState(false);
+
+  useAnimatedFavicon();
 
   React.useEffect(() => {
     if (user.totalXP > 0 && user.totalXP % 1000 === 0) {
