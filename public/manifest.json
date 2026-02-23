@@ -1,0 +1,21 @@
+{
+  "name": "LEVEL UP - Gym RPG",
+  "short_name": "LEVEL UP",
+  "description": "The Gamified Personal Strength Lab",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#00ff88",
+  "icons": [
+    {
+      "src": "https://picsum.photos/192/192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://picsum.photos/512/512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
