@@ -35,6 +35,10 @@ export function ProtocolEditor({ initialSplit, onSave, onBack }: ProtocolEditorP
     setSelectedExercises(selectedExercises.filter((_, i) => i !== index));
   };
 
+  const handleUpdateExercise = (index: number, updates: Partial<ExerciseDefinition>) => {
+    setSelectedExercises(selectedExercises.map((ex, i) => i === index ? { ...ex, ...updates } : ex));
+  };
+
   const handleCreateCustom = () => {
     if (!customEx.name) return;
     setSelectedExercises([...selectedExercises, { ...customEx }]);
@@ -87,25 +91,48 @@ export function ProtocolEditor({ initialSplit, onSave, onBack }: ProtocolEditorP
           <AnimatePresence mode="popLayout">
             {selectedExercises.length > 0 ? selectedExercises.map((ex, i) => (
               <motion.div 
-                key={`${ex.name}-${i}`}
+                key={i}
                 layout
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="card p-4 border-white/5 flex items-center justify-between group"
+                className="card p-4 border-white/5 flex items-start justify-between group"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-8 h-8 rounded bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center font-mono text-xs text-accent-primary">
+                <div className="flex items-center gap-4 flex-1">
+                  <div className="w-8 h-8 rounded bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center font-mono text-xs text-accent-primary shrink-0 mt-1">
                     {i + 1}
                   </div>
-                  <div>
-                    <h4 className="font-mono font-black uppercase italic text-sm">{ex.name}</h4>
-                    <p className="text-[10px] text-text-tertiary uppercase tracking-widest">{ex.targetSets} Sets {ex.notes && `• ${ex.notes}`}</p>
+                  <div className="flex-1 space-y-2">
+                    <input 
+                      value={ex.name}
+                      onChange={(e) => handleUpdateExercise(i, { name: e.target.value })}
+                      className="bg-transparent border-none p-0 font-mono font-black uppercase italic text-sm w-full outline-none focus:text-accent-primary transition-colors"
+                    />
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[8px] uppercase font-black text-text-tertiary tracking-widest">Sets</span>
+                        <input 
+                          type="number"
+                          value={ex.targetSets}
+                          onChange={(e) => handleUpdateExercise(i, { targetSets: parseInt(e.target.value) || 0 })}
+                          className="bg-bg-primary border border-white/10 rounded px-2 py-0.5 text-[10px] font-mono w-12 text-center outline-none focus:border-accent-primary"
+                        />
+                      </div>
+                      <div className="flex items-center gap-2 flex-1">
+                        <span className="text-[8px] uppercase font-black text-text-tertiary tracking-widest">Notes</span>
+                        <input 
+                          value={ex.notes}
+                          onChange={(e) => handleUpdateExercise(i, { notes: e.target.value })}
+                          placeholder="Tactical notes..."
+                          className="bg-bg-primary border border-white/10 rounded px-2 py-0.5 text-[10px] font-mono w-full outline-none focus:border-accent-primary"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <button 
                   onClick={() => handleRemoveExercise(i)}
-                  className="p-2 text-accent-secondary opacity-0 group-hover:opacity-100 hover:bg-accent-secondary/10 rounded transition-all"
+                  className="p-2 text-accent-secondary opacity-0 group-hover:opacity-100 hover:bg-accent-secondary/10 rounded transition-all shrink-0"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
